@@ -18,7 +18,8 @@ $(document).ready( function() {
         $("a.premium-character-name:contains(' Erl ')").html("Erl")
         $("a.premium-character-name:contains('Diagun')").html("Diagun")
         $("a.clue:contains('SPOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOKS')").html("Spooks")
-
+        $("a.clue:contains('[DEV] Trydian')").html("The Best Dev Ever")
+        $("a.clue:contains('[Dev] Rade')").html("Another Really Amazing Dev Ever")
         // Add CSS to message body of dev messages
         $("a.content-dev-nickname").parent().siblings().addClass( "content-dev-nickname" );
 
