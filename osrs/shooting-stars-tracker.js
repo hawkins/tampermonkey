@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OSRS Shooting Stars Highlighter
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  try to take over the world!
 // @author       Josh Hawkins https://github.com/hawkins
 // @match        https://osrsportal.com/shooting-stars-tracker
@@ -24,9 +24,9 @@
 
     var observer = new MutationObserver(function(mutations) {
         // First, clear any styling changes we made on a previous pass
-        Object.entries(pingedStars).forEach((world, { element }) => {
-            delete element.style.backgroundColor;
-        });
+        for (const [world, collection] of Object.entries(pingedStars)) {
+            delete collection.element.style.backgroundColor;
+        }
 
         // Check out each label of a landing site
         var labels = document.querySelectorAll("td.specialwidth");
@@ -38,24 +38,24 @@
             var time = Number(timeString.substring(0, timeString.indexOf("m ago")));
             var tier = Number(parent.children[1].innerText);
             var region = parent.children[2].innerText;
-            var location = parent.children[3].innerText;
+            var location = parent.children[3].innerText.toLowerCase();
             var world = parent.children[4].innerText.trim();
             var scout = parent.children[5].innerText;
 
             // If the label matches some criteria, track it
-            if (location.includes("Nardah") || location.includes("Prifdd")) {
+            if (location.includes("zalcano")) {
                 // Make the table row stand out in the table
                 parent.style.backgroundColor = 'RED';
 
                 // Remove any stale worlds
                 if (world in pingedStars) {
-                    if (pingedStars[world].location != location) {
+                    if (pingedStars[world].location.toLowerCase() != location) {
                         delete pingedStars[world];
                     }
                 }
 
                 // We only need good enough calls that are probably still relevant
-                if ((time < 45) && (tier >= 3)) {
+                if ((time < 35) && (tier >= 3)) {
 
                     // Ideally we would alert the user asynchronously, but we lose too much context, so not for now.
                     if (!(world in pingedStars)) {
