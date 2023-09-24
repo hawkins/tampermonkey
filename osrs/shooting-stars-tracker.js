@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OSRS Shooting Stars Highlighter
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  try to take over the world!
 // @author       Josh Hawkins https://github.com/hawkins
 // @match        https://osrsportal.com/shooting-stars-tracker
@@ -24,9 +24,9 @@
 
     var observer = new MutationObserver(function(mutations) {
         // First, clear any styling changes we made on a previous pass
-        for (const [world, collection] of Object.entries(pingedStars)) {
-            delete collection.element.style.backgroundColor;
-        }
+        //for (const [world, collection] of Object.entries(pingedStars)) {
+        //    delete collection.element.style.backgroundColor;
+        //}
 
         // Check out each label of a landing site
         var labels = document.querySelectorAll("td.specialwidth");
@@ -43,9 +43,9 @@
             var scout = parent.children[5].innerText;
 
             // If the label matches some criteria, track it
-            if (location.includes("zalcano")) {
+            if (location.includes("zalc") || location.includes("myth")) {
                 // Make the table row stand out in the table
-                parent.style.backgroundColor = 'RED';
+                //parent.style.backgroundColor = 'RED';
 
                 // Remove any stale worlds
                 if (world in pingedStars) {
@@ -55,7 +55,7 @@
                 }
 
                 // We only need good enough calls that are probably still relevant
-                if ((time < 35) && (tier >= 3)) {
+                if ((time < 20) && (tier >= 4)) {
 
                     // Ideally we would alert the user asynchronously, but we lose too much context, so not for now.
                     if (!(world in pingedStars)) {
