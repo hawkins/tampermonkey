@@ -22,6 +22,11 @@
     // Track pinged stars so we don't re-notify them on table refreshes
     var pingedStars = {};
 
+    // These are my personal preferences for my own accounts, you can edit them yourself
+    const uimLocations = ["zalc", "myth", "kharid"];
+    const normieLocations = ["kharid", "lumb", "draynor", "monastery"];
+    const bothLocations = uimLocations.concat(normieLocations);
+
     var observer = new MutationObserver(function(mutations) {
         // First, clear any styling changes we made on a previous pass
         //for (const [world, collection] of Object.entries(pingedStars)) {
@@ -43,29 +48,31 @@
             var scout = parent.children[5].innerText;
 
             // If the label matches some criteria, track it
-            if (location.includes("zalc") || location.includes("myth")) {
-                // Make the table row stand out in the table
-                //parent.style.backgroundColor = 'RED';
+            normieLocations.forEach((soughtLocation) => {
+                if (location.includes(soughtLocation)) {
+                    // Make the table row stand out in the table
+                    //parent.style.backgroundColor = 'RED';
 
-                // Remove any stale worlds
-                if (world in pingedStars) {
-                    if (pingedStars[world].location.toLowerCase() != location) {
-                        delete pingedStars[world];
-                    }
-                }
-
-                // We only need good enough calls that are probably still relevant
-                if ((time < 20) && (tier >= 4)) {
-
-                    // Ideally we would alert the user asynchronously, but we lose too much context, so not for now.
-                    if (!(world in pingedStars)) {
-                        alert(`A T${tier} star has landed at ${location} in World ${world} just ${time} minutes ago!`);
+                    // Remove any stale worlds
+                    if (world in pingedStars) {
+                        if (pingedStars[world].location.toLowerCase() != location) {
+                            delete pingedStars[world];
+                        }
                     }
 
-                    // Even if we've already pinged the star, update the entry so we can delete it when it's gone
-                    pingedStars[world] = { "element": parent, "world": world, "time": time, "tier": tier, "region": region, "location": location, "scout": scout };
+                    // We only need good enough calls that are probably still relevant
+                    if ((time < 20) && (tier >= 5)) {
+
+                        // Ideally we would alert the user asynchronously, but we lose too much context, so not for now.
+                        if (!(world in pingedStars)) {
+                            alert(`A T${tier} star was called at ${location} in World ${world} just ${time} minutes ago!`);
+                        }
+
+                        // Even if we've already pinged the star, update the entry so we can delete it when it's gone
+                        pingedStars[world] = { "element": parent, "world": world, "time": time, "tier": tier, "region": region, "location": location, "scout": scout };
+                    }
                 }
-            }
+            });
         });
     });
 
